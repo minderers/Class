@@ -13,6 +13,9 @@ import { createPinia } from 'pinia';
 import './utils/permission';
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
+// 国际化
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
 // 创建应用实例
 const app = createApp(App);
 // 全局注册
@@ -26,4 +29,8 @@ app.use(pinia)
 app.use(ElementPlus);
 // app.use指的就是app这个使用要使用什么东西 app必须use才能挂载才会生效
 app.use(router);
+// 使用国际化
+app.use(ElementPlus, {
+  locale: zhCn,
+})
 app.mount('#app');

@@ -12,24 +12,24 @@
       <div class="sou">
         <span class="zt">是否冲突：</span>
         <el-select v-model="value" filterable placeholder="请选择" style="width: 100px">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
       <div class="sou">
         <span class="zt">课程性质：</span>
         <el-select v-model="value" filterable placeholder="请选择" style="width: 200px">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
       <div class="sou">
         <span class="zt">课程类别：</span>
         <el-select v-model="value" filterable placeholder="请选择" style="width: 200px">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
       <div class="sou gjc">
         <span class="zt">关键词：</span>
-        <el-input style="margin-left: 20px;" v-model="input" placeholder="请输入关键词" />
+        <el-input style="margin-left: 10px;" v-model="input" placeholder="请输入关键词" />
         <el-button type="primary" style="margin-left: 20px;">
           <el-icon style="vertical-align: middle">
             <Search />
@@ -42,20 +42,28 @@
 
     <el-table :data="tableData" :default-sort="{ prop: 'date', order: 'descending' }" style="width: 100%;"
       empty-text="暂无数据">
-      <el-table-column prop="" label="课程号" width="180" />
-      <el-table-column prop="" label="课程名称" width="180" />
-      <el-table-column prop="" label="教学班个数" sortable width="150" />
-      <el-table-column prop="" label="课程分类" width="180" />
-      <el-table-column prop="" label="课程性质" width="180" />
-      <el-table-column prop="" label="开课单位" width="250" />
+      <el-table-column prop="" label="课程号" />
+      <el-table-column prop="" label="课程名称" />
+      <el-table-column prop="" label="上课教师" />
+      <el-table-column prop="" label="上课时间地点" />
+      <el-table-column prop="" label="课容量" />
+      <el-table-column prop="" label="已选人数" sortable />
+      <el-table-column prop="" label="校公选课类别" />
       <el-table-column prop="" label="学分" />
+      <el-table-column prop="" label="授课方式" />
+      <el-table-column prop="" label="操作" />
     </el-table>
 
-    <div class="demo-pagination-block">
-      <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[100, 200, 300, 400]"
-        :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
-        :total="400" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
+
+    <el-config-provider :locale="locale">
+      <div class="demo-pagination-block">
+        <div class="demonstration"></div>
+        <el-pagination v-model:current-page="currentPage1" :page-size="10" :small="small" :disabled="disabled"
+          :background="background" layout="total, prev, pager, next, jumper" :total="100" @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" />
+      </div>
+    </el-config-provider>
+
 
 
 
@@ -142,11 +150,14 @@
 </style>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import type { TableColumnCtx } from 'element-plus'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import en from 'element-plus/dist/locale/en.mjs'
 const input = ref('')
 
 const value = ref('')
-const options = [
+const options1 = [
   {
     value: '',
     label: '请选择',
@@ -161,7 +172,47 @@ const options = [
   }
 ]
 
-import type { TableColumnCtx } from 'element-plus'
+const options2 = [
+  {
+    value: '',
+    label: '请选择',
+  },
+  {
+    value: '1',
+    label: '选修',
+  }
+]
+
+const options3 = [
+  {
+    value: '',
+    label: '请选择',
+  },
+  {
+    value: '1',
+    label: '专业课程模块',
+  },
+  {
+    value: '2',
+    label: '素质能力与拓展模块',
+  },
+  {
+    value: '3',
+    label: '专业基础课程',
+  },
+  {
+    value: '4',
+    label: '专业选修课程',
+  }, {
+    value: '5',
+    label: '公共选修课程',
+  }, {
+    value: '6',
+    label: '专业选修课程组',
+  }
+]
+
+
 
 interface User {
   date: string
@@ -173,10 +224,8 @@ const tableData: User[] = [
 
 ]
 
-
-
-const currentPage4 = ref(4)
-const pageSize4 = ref(100)
+// 分页
+const currentPage1 = ref(5)
 const small = ref(false)
 const background = ref(false)
 const disabled = ref(false)
@@ -186,5 +235,12 @@ const handleSizeChange = (val: number) => {
 }
 const handleCurrentChange = (val: number) => {
   console.log(`current page: ${val}`)
+}
+
+const language = ref('zh-cn')
+const locale = computed(() => (language.value === 'zh-cn' ? zhCn : en))
+
+const toggle = () => {
+  language.value = language.value === 'zh-cn' ? 'en' : 'zh-cn'
 }
 </script>
